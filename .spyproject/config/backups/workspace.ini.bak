@@ -1,0 +1,12 @@
+[workspace]
+restore_data_on_startup = True
+save_data_on_exit = True
+save_history = True
+save_non_project_files = False
+project_type = empty-project-type
+recent_files = ['code\\kamernet\\kamernet\\spiders\\kamers.py', 'code\\puntenstelsel.py', '..\\..\\..\\..\\R6A0B~1.TRO\\AppData\\Local\\Temp\\kite_tutorial.py']
+
+[main]
+version = 0.2.0
+recent_files = ['code\\puntenstelsel.py', '..\\..\\..\\OneDrive - VPRO\\besloten Kamer\\code\\besloten.py', 'code\\kamernet\\kamernet\\spiders\\kamers.py', 'code\\kamernet\\appartement-1876214.html', 'code\\test.py', 'code\\woningdetails_todict.py']
+
