@@ -139,25 +139,12 @@ kamers_top['punten_cv'] = kamers_top['m2_kamer'] * 0.75
 kamers_top['punten_totaal'] = kamers_top['punten_totaal'] + kamers_top['punten_cv']
 
 # Kookgelegenheid
-kamers_top['punten_keuken'] = kamers_top[(kamers_top['keuken'] == " Gedeeld ") + 5
-# TODO multiple coditions
-kamers_top.loc[((kamers_top['keuken'] == " Gedeeld ") & (kamers_top['inwoners'] <= 15)), 'punten_keuken'] = 5
-
-
-# =============================================================================
-# kijk hier
-# def myfunc(age, pclass):
-#     if pd.isnull(age) and pclass==1:
-#         age=40
-#     elif pd.isnull(age) and pclass==2:
-#         age=30
-#     elif pd.isnull(age) and pclass==3:
-#         age=25
-#     else:
-#         age=age
-#     return age
-# https://predictivehacks.com/pandas-how-to-assign-values-based-on-multiple-conditions-of-different-columns/
-# =============================================================================
+# kamers_top['punten_keuken'] = kamers_top[(kamers_top['keuken'] == " Gedeeld ") + 5
+kamers_top['punten_keuken'] = 0
+kamers_top.loc[((kamers_top['keuken'] == " Gedeeld ") & (kamers_top['inwoners'] <= 5)), 'punten_keuken'] + 4
+kamers_top.loc[((kamers_top['keuken'] == " Gedeeld ") & (kamers_top['inwoners'] > 5)), 'punten_keuken'] + 0
+kamers_top.loc[((kamers_top['keuken'] == " Eigen ") & (kamers_top['m2_kamer'] <= 25)), 'punten_keuken'] + 10
+kamers_top.loc[((kamers_top['keuken'] == " Eigen ") & (kamers_top['m2_kamer'] > 25)), 'punten_keuken'] + 20
 
 
 #  WC
