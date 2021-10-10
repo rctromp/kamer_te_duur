@@ -39,7 +39,7 @@ kamernet = kamernet.drop_duplicates(subset=kamernet.columns.difference(['publica
 #TODO hier misschien een if-statement van maken: if in variable explore
 del (adProperties, file, filename, reader, row, mergedRows)
 
-# TODO Filter kamers op html NOG DOEN MAAR DAN OP URL voor van voor 15-09!
+# # Filter kamers op html NOG DOEN MAAR DAN OP URL voor van voor 15-09!
 
 # # Filter kamers op url
 kamernet['woningtype'] = kamernet['kamers_url'].str.split('huren/').str[1]
