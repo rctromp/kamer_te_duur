@@ -5,107 +5,58 @@ Created on Mon Sep 27 12:52:35 2021
 @author: r.tromp
 """
 import pandas as pd
-import numpy as np
-# from .code.woningdetails_todict import rows
 import os
-import pprint
-import csv
-import json
-import pprint
 import csv
 import json
 pd.options.mode.chained_assignment = None  # default='warn'
 
-# Read csv van 1 dag, om te testen
-# kamernet = pd.read_csv('code/kamernet/kamers1509.csv')
-
 # Pak alle scrape csv's en merge ze tot 1 dataset
-pp = pprint.PrettyPrinter(indent=4)
-newFrame = pd.DataFrame()
-# rows_new = []
+mergedRows = []
 
 for filename in os.listdir(r'./code/kamernet'):
     if '.csv' in filename:
         with open(f'./code/kamernet/{filename}', newline='') as file:
-            rows_new = []
             reader = csv.DictReader(file)
+
             for row in reader:
                 if 'kamers_url' in row:
-                    row_new = {**row}
-                    rows_new.append(row_new)
-            filedata = pd.DataFrame(rows_new)
-            if newFrame.empty:
-                newFrame = pd.concat([newFrame, filedata])
-            elif rows_new:
-                # @TODO check of merge daadwerkelijk dubbelingen eruit haalt
-                newFrame = newFrame.merge(filedata, how="outer")
-                # Drop alleen de duplicates waar het enige verschil de publicatiedatum en html is
-                newFrame = newFrame.drop_duplicates(subset=newFrame.columns.difference(['publicatiedatum', 'html']))
-                # newFrame = newFrame.drop_duplicates(subset=newFrame.columns.difference(['publicatiedatum']))
-                duplicatesFrame = newFrame[newFrame['kamers_url'].duplicated(keep=False)]
-                duplicatesFrame = duplicatesFrame.sort_values('kamers_url')
-                # duplicatesFrame.to_csv('duplicates.csv')
+                    # Format string to be json
+                    adProperties = row['woningdetails'].replace("'", '"')
+                    adProperties = json.loads(adProperties)
 
-# Export newFrame als csv en import als filename
-newFrame.to_csv('kamers_totaal.csv', index=False)
-filename = 'kamers_totaal.csv'
-# filename = 'code/kamernet/kamers1509.csv'
-rows = []
+                    # Make keys lowercase
+                    adProperties = dict((k.lower(), v) for k, v in adProperties.items())
 
-# Read file en maak van dict 'woningdetails' aparte columns
-with open(filename, newline='') as file:
-    reader = csv.DictReader(file)
-    for row in reader:
-        # Format string to be json
-        adProperties = row['woningdetails'].replace("'", '"')
-        adProperties = json.loads(adProperties)
+                    del row['woningdetails']
+                    row = {**row, **adProperties}
 
-        # Make keys lowercase
-        adProperties = dict((k.lower(), v) for k,v in adProperties.items())
+                    # Add row to list of rows
+                    mergedRows.append(row)
 
-        del row['woningdetails']
-        # pp.pprint(adProperties)
-        row = { **row,
-                **adProperties }
+kamernet = pd.DataFrame(mergedRows)
+kamernet = kamernet.drop_duplicates(subset=kamernet.columns.difference(['publicatiedatum', 'html']))
 
-        # Add row to list of rows
-        rows.append(row)
 #TODO hier misschien een if-statement van maken: if in variable explore        
-del(adProperties, file, filename, pp, reader, row, filedata, row_new, rows_new, newFrame)
-
-# Make df
-kamernet = pd.DataFrame(rows)
+del (adProperties, file, filename, reader, row, mergedRows)
 
 # # Filter kamers op html NOG DOEN MAAR DAN OP URL voor van voor 15-09!
-# kamers = kamernet[kamernet['html'].str.contains("kamer")]
-# # Filter kamers op url
-kamernet['woningtype'] = kamernet['kamers_url'].str.split('huren/')
-woningtypes = kamernet['woningtype'].apply(pd.Series)
-woningtypes = woningtypes[1].str.split('-')
-woningtypes = woningtypes.apply(pd.Series)
-woningtypes = woningtypes[0]
-kamernet['woningtype'] = woningtypes
 
-kamers = kamernet[kamernet['woningtype'].str.contains("kamer")]
-# del(woningtypes)
+# # Filter kamers op url
+kamernet['woningtype'] = kamernet['kamers_url'].str.split('huren/').str[1]
+kamernet['woningtype'] = kamernet['woningtype'].str.split('-').str[0]
+
+kamers = kamernet[kamernet['woningtype'].str.fullmatch("kamer")]
 
 # White spaces weg bij relevante columns
 # kamers['keuken'] = kamers['keuken'].str.strip()
 
 # Maak van kamerprijs een integer
-length = len('Ã¢â€šÂ¬')
-kamers['prijs'] = kamers['prijs'].str[length:]
-kamers['prijs'] = kamers['prijs'].astype(str).astype(int)
+kamers['prijs'] = kamers['prijs'].str.split(' ').str[1].astype(int)
 
-# Punten geven aan oppervlakte
-punten_m2 = 5
-# Verwijder laatste letters
-kamers['m2_kamer'] = kamers['oppervlakte_kamer'].str[:-1]
-# Maak int
-kamers['m2_kamer'] = kamers['m2_kamer'].astype(str).astype(int)
+# Verwijder laatste letters en maak integer
+kamers['m2_kamer'] = kamers['oppervlakte_kamer'].str[:-1].astype(int)
 # Bereken het aantal punten per m2 en voeg toe aan df
-punten_totaal = kamers['m2_kamer'] * punten_m2
-kamers['punten_totaal'] = punten_totaal
+kamers['punten_totaal'] = kamers['m2_kamer'] * 5
 
 # Alleen kijken naar kamers met totale oppervlakte
 kamers_top = kamers[kamers['oppervlakte_subtitel'].str.contains("Totale oppervlakte")]
@@ -182,32 +133,3 @@ unexplainedDuplicates = kamers_top[
 #
 #
 # =============================================================================
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
