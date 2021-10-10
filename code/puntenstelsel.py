@@ -39,7 +39,8 @@ for filename in os.listdir(r'./code/kamernet'):
             elif rows_new:
                 # @TODO check of merge daadwerkelijk dubbelingen eruit haalt
                 newFrame = newFrame.merge(filedata, how="outer")
-                newFrame = newFrame.drop_duplicates('kamers_url')
+                # Drop alleen de duplicates waar het enige verschil de publicatiedatum en html is
+                newFrame = newFrame.drop_duplicates(subset=newFrame.columns.difference(['publicatiedatum', 'html']))
                 # newFrame = newFrame.drop_duplicates(subset=newFrame.columns.difference(['publicatiedatum']))
                 duplicatesFrame = newFrame[newFrame['kamers_url'].duplicated(keep=False)]
                 duplicatesFrame = duplicatesFrame.sort_values('kamers_url')
@@ -160,7 +161,14 @@ kamers_top['wettelijke_prijs'] = (kamers_top['punten_totaal'] * punt_prijs).roun
 kamers_top.loc[kamers_top['prijs'] > kamers_top['wettelijke_prijs'], 'te_duur'] = True
 kamers_top.loc[kamers_top['prijs'] < kamers_top['wettelijke_prijs'], 'te_duur'] = False
 # Hoeveel te duur
+# Drop alle kamers waar de url en wettelijke prijs hetzelfde zijn
+kamers_top = kamers_top.drop_duplicates(['kamers_url', 'wettelijke_prijs'])
 kamers_top['te_duur'].value_counts(normalize=True)
+
+# Deze regel checkt of er rijen zijn waar de kamers_url, oppervlakte_kamer, oppervlakte_subtitel en prijs gelijk zijn
+# als dat zo is is er een andere reden waarom de wettelijke prijs afwijkt, met de huidige dataset zijn dit 0 rijen
+unexplainedDuplicates = kamers_top[
+    kamers_top.duplicated(['kamers_url', 'oppervlakte_kamer', 'oppervlakte_subtitel', 'prijs'], keep=False)]
 
 # TODO
 # =============================================================================
