@@ -83,7 +83,7 @@ kamers_top['inwoners'] = kamers_top['huisgenoten_clean'] + 1
 kamers_top['m2_gemeenschappelijk'] = kamers_top['oppervlakte_subtitel'] - (kamers_top['m2_kamer'] * kamers_top['huisgenoten_clean'])
 kamers_top.loc[kamers_top['m2_gemeenschappelijk'] > 15, 'punten_gemeenschappelijk'] = kamers_top['m2_gemeenschappelijk'] * 5 / kamers_top['inwoners']
 kamers_top.loc[kamers_top['m2_gemeenschappelijk'] <= 15, 'punten_gemeenschappelijk'] = 0
-kamers_top['punten_totaal_new'] = kamers_top['punten_totaal'] + kamers_top['punten_gemeenschappelijk'].astype(str).astype(float)
+kamers_top['punten_totaal'] = kamers_top['punten_totaal'] + kamers_top['punten_gemeenschappelijk'].astype(str).astype(float)
 
 # Neem aan dat het CV heeft
 kamers_top['punten_cv'] = kamers_top['m2_kamer'] * 0.75
@@ -123,19 +123,15 @@ kamers_top['punten_totaal'] = kamers_top['punten_totaal'].astype(int)
 df_puntprijs = pd.read_excel('src/punten_prijs_2021.xlsx')
 df_puntprijs = df_puntprijs.rename(columns = {'punten': 'punten_totaal'})
 df_puntprijs = df_puntprijs.rename(columns = {'prijs': 'puntenstelsel_prijs'})
-kamers_top_test = kamers_top
-kamers_top_test = kamers_top_test.merge(df_puntprijs, how="left", on="punten_totaal")
+kamers_top = kamers_top.merge(df_puntprijs, how="left", on="punten_totaal")
 #hierna een merge
 
-
-punt_prijs = 2.25
-kamers_top['wettelijke_prijs'] = (kamers_top['punten_totaal'] * punt_prijs).round(0)
 # Als prijs hoger dan kamerprijs, True anders False
-kamers_top.loc[kamers_top['prijs'] > kamers_top['wettelijke_prijs'], 'te_duur'] = True
-kamers_top.loc[kamers_top['prijs'] < kamers_top['wettelijke_prijs'], 'te_duur'] = False
+kamers_top.loc[kamers_top['prijs'] > kamers_top['bedrag'], 'te_duur'] = True
+kamers_top.loc[kamers_top['prijs'] < kamers_top['bedrag'], 'te_duur'] = False
 # Hoeveel te duur
 # Drop alle kamers waar de url en wettelijke prijs hetzelfde zijn
-kamers_top = kamers_top.drop_duplicates(['kamers_url', 'wettelijke_prijs'])
+kamers_top = kamers_top.drop_duplicates(['kamers_url', 'bedrag'])
 kamers_top['te_duur'].value_counts(normalize=True)
  
 # Deze regel checkt of er rijen zijn waar de kamers_url, oppervlakte_kamer, oppervlakte_subtitel en prijs gelijk zijn
