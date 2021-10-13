@@ -74,15 +74,16 @@ kamers_top.loc[(~kamers_top['huisgenoten'].str.contains('Meer dan')) & (~kamers_
 kamers_top.loc[kamers_top['huisgenoten_clean'].notnull(), 'huisgenoten_clean'] = kamers_top['huisgenoten_clean'].astype(str).astype(float)
 kamers_top.loc[kamers_top['huisgenoten'].str.contains('Meer dan'), 'huisgenoten_clean'] = kamers_top['huisgenoten_clean'] + 1
 
+kamers_top = kamers_top[kamers_top['huisgenoten_clean'].notnull()]
+kamers_top['inwoners'] = kamers_top['huisgenoten_clean'] + 1
+
 # Als de gemeenschappelijke woonruimte >15m2 is doe wat
 # Schatting van de gemeenschappelijke woonruimte
 # LET OP: Als huisgenoten onbekend geen berekening mogelijk en dus geen extra punten toegekend voor gemeenschappelijke ruimtes, oplossing: op basis van gedeelte ruimtes (keuken, badkamer, etc) concluderen minstens 1 huisgenoot
-kamers_top.loc[kamers_top['huisgenoten_clean'].notnull(), 'm2_gemeenschappelijk'] = kamers_top['oppervlakte_subtitel'] - (kamers_top['m2_kamer'] * kamers_top['huisgenoten_clean'])
-kamers_top['inwoners'] = kamers_top['huisgenoten_clean'] + 1
+kamers_top['m2_gemeenschappelijk'] = kamers_top['oppervlakte_subtitel'] - (kamers_top['m2_kamer'] * kamers_top['huisgenoten_clean'])
 kamers_top.loc[kamers_top['m2_gemeenschappelijk'] > 15, 'punten_gemeenschappelijk'] = kamers_top['m2_gemeenschappelijk'] * 5 / kamers_top['inwoners']
 kamers_top.loc[kamers_top['m2_gemeenschappelijk'] <= 15, 'punten_gemeenschappelijk'] = 0
-kamers_top.loc[kamers_top['punten_gemeenschappelijk'].notnull(), 'punten_totaal_new'] = kamers_top['punten_totaal'] + kamers_top['punten_gemeenschappelijk'].astype(str).astype(float)
-kamers_top.loc[kamers_top['punten_gemeenschappelijk'].isnull(), 'punten_totaal_new'] = kamers_top['punten_totaal']
+kamers_top['punten_totaal_new'] = kamers_top['punten_totaal'] + kamers_top['punten_gemeenschappelijk'].astype(str).astype(float)
 
 # Neem aan dat het CV heeft
 kamers_top['punten_cv'] = kamers_top['m2_kamer'] * 0.75
