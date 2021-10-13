@@ -131,6 +131,9 @@ kamers_top['te_duur'].value_counts(normalize=True)
 unexplainedDuplicates = kamers_top[
     kamers_top.duplicated(['kamers_url', 'oppervlakte_kamer', 'oppervlakte_subtitel', 'prijs'], keep=False)]
 
+# Export to csv
+kamers_top.to_csv('kamers_top.csv')
+
 # TODO
 # =============================================================================
 # Alle white spaces weg in het begin
