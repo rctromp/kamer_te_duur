@@ -116,8 +116,18 @@ kamers_top.loc[(kamers_top['m2_kamer'] < 10), 'aftrekpunten'] = kamers_top['aftr
 # WC via andere kamer kan ik niet zien
 
 # Bereken prijs
+# Voeg de officiele puntenstelselkaders toe aan kamers_top
+df_puntprijs = pd.read_excel('src/punten_prijs_2021.xlsx')
+df_puntprijs = df_puntprijs.rename(columns = {'punten': 'puntenstelsel_punten'})
+df_puntprijs = df_puntprijs.rename(columns = {'prijs': 'puntenstelsel_prijs'})
+kamers_top_test = kamers_top
+kamers_top_test = kamers_top_test.assign(df_puntprijs['puntenstelsel_punten'])
+#hierna een merge
+
+
 kamers_top['punten_totaal'] = kamers_top['punten_totaal'] + kamers_top['punten_cv'] + kamers_top['punten_keuken'] + kamers_top['punten_toilet'] + kamers_top['punten_badkamer'] + kamers_top['aftrekpunten']
-punt_prijs = 2.21
+
+punt_prijs = 2.25
 kamers_top['wettelijke_prijs'] = (kamers_top['punten_totaal'] * punt_prijs).round(0)
 # Als prijs hoger dan kamerprijs, True anders False
 kamers_top.loc[kamers_top['prijs'] > kamers_top['wettelijke_prijs'], 'te_duur'] = True
