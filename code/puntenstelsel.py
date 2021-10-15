@@ -88,14 +88,12 @@ kamers_top['punten_totaal'] = kamers_top['punten_totaal'] + kamers_top['punten_g
 # Neem aan dat het CV heeft
 kamers_top['punten_cv'] = kamers_top['m2_kamer'] * 0.75
 
-
 # Kookgelegenheid
 kamers_top['punten_keuken'] = 0
 kamers_top.loc[((kamers_top['keuken'] == " Gedeeld ") & (kamers_top['inwoners'] <= 5)), 'punten_keuken'] = kamers_top['punten_keuken'] + 4
 kamers_top.loc[((kamers_top['keuken'] == " Gedeeld ") & (kamers_top['inwoners'] > 5)), 'punten_keuken'] = kamers_top['punten_keuken'] + 0
 kamers_top.loc[((kamers_top['keuken'] == " Eigen ") & (kamers_top['m2_kamer'] <= 25)), 'punten_keuken'] = kamers_top['punten_keuken'] + 10
 kamers_top.loc[((kamers_top['keuken'] == " Eigen ") & (kamers_top['m2_kamer'] > 25)), 'punten_keuken'] = kamers_top['punten_keuken'] + 20
-
 
 #  WC 
 kamers_top['punten_toilet'] = 0
@@ -122,9 +120,8 @@ kamers_top['punten_totaal'] = kamers_top['punten_totaal'].astype(int)
 # Voeg de officiele puntenstelselkaders toe aan kamers_top
 df_puntprijs = pd.read_excel('src/punten_prijs_2021.xlsx')
 df_puntprijs = df_puntprijs.rename(columns = {'punten': 'punten_totaal'})
-df_puntprijs = df_puntprijs.rename(columns = {'prijs': 'puntenstelsel_prijs'})
+df_puntprijs = df_puntprijs.rename(columns = {'prijs': 'bedrag'})
 kamers_top = kamers_top.merge(df_puntprijs, how="left", on="punten_totaal")
-#hierna een merge
 
 # Als prijs hoger dan kamerprijs, True anders False
 kamers_top.loc[kamers_top['prijs'] > kamers_top['bedrag'], 'te_duur'] = True
@@ -133,22 +130,42 @@ kamers_top.loc[kamers_top['prijs'] < kamers_top['bedrag'], 'te_duur'] = False
 # Drop alle kamers waar de url en wettelijke prijs hetzelfde zijn
 kamers_top = kamers_top.drop_duplicates(['kamers_url', 'bedrag'])
 kamers_top['te_duur'].value_counts(normalize=True)
- 
+
 # Deze regel checkt of er rijen zijn waar de kamers_url, oppervlakte_kamer, oppervlakte_subtitel en prijs gelijk zijn
 # als dat zo is is er een andere reden waarom de wettelijke prijs afwijkt, met de huidige dataset zijn dit 0 rijen
 unexplainedDuplicates = kamers_top[
     kamers_top.duplicated(['kamers_url', 'oppervlakte_kamer', 'oppervlakte_subtitel', 'prijs'], keep=False)]
 
+# Statistieken: 
+# Gemiddelde prijs per kamer
+prijs_kamer_mean = kamers_top['prijs'].mean()
+print(round(prijs_kamer_mean))
+# Gemiddeld wat een kamer zou moeten kosten
+prijs_kamer_puntenstelsel = kamers_top['bedrag'].mean()
+print(round(prijs_kamer_puntenstelsel))
+# Verschil te duur
+kamers_top['prijsverschil'] = kamers_top['prijs'] - kamers_top['bedrag']
+# Hoeveel geld totaal en gemiddeld
+totaal_teveel_geld = kamers_top['prijsverschil'].sum()
+print(totaal_teveel_geld)
+te_duur_mean = kamers_top['prijsverschil'].mean()
+print(round(te_duur_mean))
+
+# Per gemeente
+
+
+
 # Export to csv
-kamers_top.to_csv('kamers_top.csv')
+# kamers_top.to_csv('kamers_top.csv')
 
 # TODO
 # =============================================================================
 # Alle white spaces weg in het begin
 # Kijk per stad
+
 # Als er niet aan criteria voldaan wordt, bijvoorbeeld woningdetails niet ingevuld:
 # benaderen of een veilige aanname doen. (ik denk een gemiddelde bij 'onbekend')
-# Hoeveel is de punt_prijs? Ik snap het niet zo goed in de rekentool.
+# Hoeveel is de punt_prijs? Ik snap het niet zo goed in  de rekentool.
 # 
 # aannames
 # Geen Rijksmomunment (+50)
