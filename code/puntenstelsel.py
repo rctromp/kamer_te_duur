@@ -152,7 +152,9 @@ te_duur_mean = kamers_top['prijsverschil'].mean()
 print(round(te_duur_mean))
 
 # Per gemeente
-
+# maak van gemeente heldere strings
+kamers_top['plaats'] = kamers_top['plaats'].str[3:]
+# kamers_top['plaats'].groupby
 
 
 # Export to csv
