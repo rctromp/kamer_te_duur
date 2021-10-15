@@ -154,7 +154,7 @@ print(round(te_duur_mean))
 # Per gemeente
 # maak van gemeente heldere strings
 kamers_top['plaats'] = kamers_top['plaats'].str[3:]
-# kamers_top['plaats'].groupby
+per_gemeente = kamers_top.groupby('plaats')['te_duur'].value_counts(normalize=True)
 
 
 # Export to csv
