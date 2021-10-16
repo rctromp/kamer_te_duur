@@ -154,12 +154,18 @@ print(round(te_duur_mean))
 # Per gemeente
 # maak van gemeente heldere strings
 kamers_top['plaats'] = kamers_top['plaats'].str[3:]
-per_gemeente = kamers_top.groupby('plaats')['te_duur'].value_counts(normalize=True)
-
+per_gemeente = kamers_top.groupby('plaats')['te_duur'].value_counts(normalize=True).to_frame()
+# Vul df voor gemeente met relevante stats
+gemeente_stats = pd.DataFrame()
+gemeente_stats['prijs_gemiddeld'] = kamers_top.groupby('plaats')['prijs'].mean()
+gemeente_stats['punten_bedrag_gemiddeld'] = kamers_top.groupby('plaats')['bedrag'].mean()
+gemeente_stats['prijsverschil_gemiddeld'] = kamers_top.groupby('plaats')['prijsverschil'].mean()
+gemeente_stats['m2_kamer'] = kamers_top.groupby('plaats')['m2_kamer'].mean()
+gemeente_stats['count'] = kamers_top.groupby('plaats')['prijsverschil'].count()
 
 # Export to csv
-# kamers_top.to_csv('kamers_top.csv')
-
+kamers_top.to_csv('kamers_top.csv')
+gemeente_stats.to_csv('kamerstats_per_gemeente')
 # TODO
 # =============================================================================
 # Alle white spaces weg in het begin
