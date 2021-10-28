@@ -35,8 +35,7 @@ for filename in os.listdir(r'./code/kamernet'):
 
 kamernet = pd.DataFrame(mergedRows)
 kamernet = kamernet.drop_duplicates(subset=kamernet.columns.difference(['publicatiedatum', 'html']))
-
-#TODO hier misschien een if-statement van maken: if in variable explore        
+ 
 del (adProperties, file, filename, reader, row, mergedRows)
 
 # # Filter kamers op url
@@ -44,9 +43,6 @@ kamernet['woningtype'] = kamernet['kamers_url'].str.split('huren/').str[1]
 kamernet['woningtype'] = kamernet['woningtype'].str.split('-').str[0]
 
 kamers = kamernet[kamernet['woningtype'].str.fullmatch("kamer")]
-
-# White spaces weg bij relevante columns
-# kamers['keuken'] = kamers['keuken'].str.strip()
 
 # Maak van kamerprijs een integer
 kamers['prijs'] = kamers['prijs'].str.split(' ').str[1].astype(int)
@@ -62,10 +58,6 @@ kamers_top = kamers[kamers['oppervlakte_subtitel'].str.contains("Totale oppervla
 kamers_top['oppervlakte_subtitel'] = kamers_top['oppervlakte_subtitel'].str[:-4]
 strlenght = len('totale oppervlakte:')
 kamers_top['oppervlakte_subtitel'] = kamers_top['oppervlakte_subtitel'].str[strlenght:]
-# Maak aparte df van de kamers die totale oppervlakte hebben en geen NaN:
-# kamers['oppervlakte_subtitel'] = kamers['oppervlakte_subtitel'].replace("", np.nan, inplace=True)
-# # kamers_top = kamers[kamers['oppervlakte_subtitel'].dropna(inplace = True)]
-# kamers_top = kamers[kamers['oppervlakte_subtitel'].notna()]
 # Maak er een integer van zodat we kunnen rekenen
 kamers_top['oppervlakte_subtitel'] = kamers_top['oppervlakte_subtitel'].astype(str).astype(int)
 
@@ -111,10 +103,12 @@ kamers_top.loc[((kamers_top['badkamer'] == " Gedeeld ") & (kamers_top['inwoners'
 # Aftrekpunten
 kamers_top['aftrekpunten'] = 0
 kamers_top.loc[(kamers_top['m2_kamer'] < 10), 'aftrekpunten'] = kamers_top['aftrekpunten'] - 15 
-# WC via andere kamer kan ik niet zien
 
+
+# alles bij elkaar optellen
 kamers_top['punten_totaal'] = kamers_top['punten_totaal'] + kamers_top['punten_cv'] + kamers_top['punten_keuken'] + kamers_top['punten_toilet'] + kamers_top['punten_badkamer'] + kamers_top['aftrekpunten']
 kamers_top['punten_totaal'] = kamers_top['punten_totaal'].astype(int)
+
 
 # Bereken prijs
 # Voeg de officiele puntenstelselkaders toe aan kamers_top
@@ -122,6 +116,14 @@ df_puntprijs = pd.read_excel('src/punten_prijs_2021.xlsx')
 df_puntprijs = df_puntprijs.rename(columns = {'punten': 'punten_totaal'})
 df_puntprijs = df_puntprijs.rename(columns = {'prijs': 'bedrag'})
 kamers_top = kamers_top.merge(df_puntprijs, how="left", on="punten_totaal")
+
+# Wat als ik onderscheid maak tussen kale huur en g/w/l
+len('p/m | incl. g/w/e')
+kamers_top['GWL_kosten'] = 0
+kamers_top.loc[(kamers_top['gas_water_licht'] == "p/m | incl. g/w/e"), 'GWL_kosten'] = kamers_top['GWL_kosten'] + 60
+kamers_top.loc[(kamers_top['gas_water_licht'] == "p/m | excl. g/w/e"), 'GWL_kosten'] = kamers_top['GWL_kosten'] + 0
+# trek af van de prijs
+kamers_top['prijs'] = kamers_top['prijs'] - kamers_top['GWL_kosten'] 
 
 # Als prijs hoger dan kamerprijs, True anders False
 kamers_top.loc[kamers_top['prijs'] > kamers_top['bedrag'], 'te_duur'] = True
@@ -139,43 +141,36 @@ unexplainedDuplicates = kamers_top[
 # Statistieken: 
 # Gemiddelde prijs per kamer
 prijs_kamer_mean = kamers_top['prijs'].mean()
-print(round(prijs_kamer_mean))
+print('gemiddelde vraagprijs NL:',round(prijs_kamer_mean))
 # Gemiddeld wat een kamer zou moeten kosten
 prijs_kamer_puntenstelsel = kamers_top['bedrag'].mean()
-print(round(prijs_kamer_puntenstelsel))
+print('wettelijke prijs NL:',round(prijs_kamer_puntenstelsel))
 # Verschil te duur
 kamers_top['prijsverschil'] = kamers_top['prijs'] - kamers_top['bedrag']
 # Hoeveel geld totaal en gemiddeld
 totaal_teveel_geld = kamers_top['prijsverschil'].sum()
-print(totaal_teveel_geld)
+print('totaal teveel huur NL:',round(totaal_teveel_geld))
 te_duur_mean = kamers_top['prijsverschil'].mean()
-print(round(te_duur_mean))
+print('gemiddele prijsverschil NL',round(te_duur_mean))
+# Hoeveel procent is de prijs te duur?
+procent_prijs_teduur = round((prijs_kamer_mean - prijs_kamer_puntenstelsel) / prijs_kamer_puntenstelsel * 100)
+print(procent_prijs_teduur)
 
 # Per gemeente
 # maak van gemeente heldere strings
 kamers_top['plaats'] = kamers_top['plaats'].str[3:]
-per_gemeente = kamers_top.groupby('plaats')['te_duur'].value_counts(normalize=True).to_frame()
+te_duur_per_gemeente = kamers_top.groupby('plaats')['te_duur'].value_counts(normalize=True).to_frame()
 # Vul df voor gemeente met relevante stats
 gemeente_stats = pd.DataFrame()
-gemeente_stats['prijs_gemiddeld'] = kamers_top.groupby('plaats')['prijs'].mean()
-gemeente_stats['punten_bedrag_gemiddeld'] = kamers_top.groupby('plaats')['bedrag'].mean()
-gemeente_stats['prijsverschil_gemiddeld'] = kamers_top.groupby('plaats')['prijsverschil'].mean()
-gemeente_stats['m2_kamer'] = kamers_top.groupby('plaats')['m2_kamer'].mean()
+gemeente_stats['prijs_gemiddeld'] = kamers_top.groupby('plaats')['prijs'].mean().round(0)
+gemeente_stats['punten_bedrag_gemiddeld'] = kamers_top.groupby('plaats')['bedrag'].mean().round(0)
+gemeente_stats['prijsverschil_gemiddeld'] = kamers_top.groupby('plaats')['prijsverschil'].mean().round(0)
+gemeente_stats['m2_kamer'] = kamers_top.groupby('plaats')['m2_kamer'].mean().round(0)
 gemeente_stats['count'] = kamers_top.groupby('plaats')['prijsverschil'].count()
+gemeente_stats['prijs_teduur_procent'] =  round((gemeente_stats['prijs_gemiddeld'] - gemeente_stats['punten_bedrag_gemiddeld']) / gemeente_stats['punten_bedrag_gemiddeld'] * 100)
 
 # Export to csv
-kamers_top.to_csv('kamers_top.csv')
-gemeente_stats.to_csv('kamerstats_per_gemeente')
-# TODO
-# =============================================================================
-# Alle white spaces weg in het begin
-# Kijk per stad
+kamers_top.to_csv('results/kamers_top.csv')
+gemeente_stats.to_csv('results/kamerstats_per_gemeente.csv')
+te_duur_per_gemeente.to_csv('results/gemeente_te_duur.csv')
 
-# Als er niet aan criteria voldaan wordt, bijvoorbeeld woningdetails niet ingevuld:
-# benaderen of een veilige aanname doen. (ik denk een gemiddelde bij 'onbekend')
-# Hoeveel is de punt_prijs? Ik snap het niet zo goed in  de rekentool.
-# 
-# aannames
-# Geen Rijksmomunment (+50)
-# Geen wc via een andere kamer -15
-# =============================================================================

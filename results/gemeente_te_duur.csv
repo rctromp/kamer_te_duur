@@ -1,0 +1,204 @@
+plaats,te_duur,te_duur,Procent
+Aalsmeer,TRUE,1,100
+Alkmaar,TRUE,0.6,60
+Alkmaar,FALSE,0.4,40
+Almere,TRUE,0.875,87.5
+Almere,FALSE,0.125,12.5
+Alphen aan den Rijn,TRUE,0.666666667,66.66666667
+Alphen aan den Rijn,FALSE,0.333333333,33.33333333
+Amersfoort,TRUE,0.8,80
+Amersfoort,FALSE,0.2,20
+Amstelveen,TRUE,0.8,80
+Amstelveen,FALSE,0.2,20
+Amstenrade,TRUE,1,100
+Amsterdam,TRUE,0.946768061,94.67680608
+Amsterdam,FALSE,0.053231939,5.323193916
+Apeldoorn,FALSE,0.666666667,66.66666667
+Apeldoorn,TRUE,0.333333333,33.33333333
+Arnhem,TRUE,0.75,75
+Arnhem,FALSE,0.25,25
+Assen,TRUE,1,100
+Badhoevedorp,TRUE,1,100
+Barendrecht,FALSE,1,100
+Barneveld,TRUE,1,100
+Bedum,FALSE,1,100
+Beilen,TRUE,1,100
+Bemmel,FALSE,1,100
+Bergambacht,TRUE,1,100
+Bergen op Zoom,TRUE,1,100
+Best,TRUE,1,100
+Beuningen Gld,TRUE,0.666666667,66.66666667
+Beuningen Gld,FALSE,0.333333333,33.33333333
+Blokker,TRUE,1,100
+Borgercompagnie,TRUE,1,100
+Boxmeer,TRUE,1,100
+Breda,TRUE,0.85,85
+Breda,FALSE,0.15,15
+Bussum,TRUE,1,100
+Callantsoog,TRUE,1,100
+Capelle aan den IJssel,TRUE,0.8,80
+Capelle aan den IJssel,FALSE,0.2,20
+Cromvoirt,FALSE,1,100
+Culemborg,TRUE,1,100
+De Bilt,TRUE,1,100
+De Meern,TRUE,1,100
+Dedemsvaart,FALSE,1,100
+Delft,TRUE,0.7875,78.75
+Delft,FALSE,0.2125,21.25
+Den Bosch,TRUE,1,100
+Den Haag,TRUE,0.870967742,87.09677419
+Den Haag,FALSE,0.129032258,12.90322581
+Den Helder,TRUE,1,100
+Deventer,TRUE,0.6,60
+Deventer,FALSE,0.4,40
+Diemen,TRUE,1,100
+Doorn,TRUE,1,100
+Dordrecht,TRUE,1,100
+Drachten,TRUE,1,100
+Driebergen-Rijsenburg,TRUE,1,100
+Duivendrecht,TRUE,1,100
+Ede,TRUE,1,100
+Eelderwolde,TRUE,1,100
+Eindhoven,TRUE,0.857142857,85.71428571
+Eindhoven,FALSE,0.142857143,14.28571429
+Emmen,FALSE,1,100
+Enschede,FALSE,0.695652174,69.56521739
+Enschede,TRUE,0.304347826,30.43478261
+Geertruidenberg,TRUE,1,100
+Geleen,TRUE,1,100
+Gennep,TRUE,1,100
+Goes,TRUE,1,100
+Gouda,FALSE,1,100
+Groningen,TRUE,0.86,86
+Groningen,FALSE,0.14,14
+Haarlem,TRUE,0.875,87.5
+Haarlem,FALSE,0.125,12.5
+Halfweg,TRUE,1,100
+Harderwijk,FALSE,1,100
+Haren Gn,TRUE,1,100
+Harmelen,FALSE,1,100
+Heemskerk,TRUE,1,100
+Heemstede,FALSE,0.5,50
+Heemstede,TRUE,0.5,50
+Heerenveen,FALSE,1,100
+Heerhugowaard,FALSE,1,100
+Heerlen,TRUE,1,100
+Heiligerlee,TRUE,1,100
+Helden,FALSE,1,100
+Hengelo,FALSE,0.666666667,66.66666667
+Hengelo,TRUE,0.333333333,33.33333333
+Heteren,TRUE,1,100
+Hillegom,TRUE,1,100
+Hilversum,TRUE,0.916666667,91.66666667
+Hilversum,FALSE,0.083333333,8.333333333
+Hoevelaken,TRUE,1,100
+Hoofddorp,FALSE,0.571428571,57.14285714
+Hoofddorp,TRUE,0.428571429,42.85714286
+Hoogezand,TRUE,1,100
+Hoogvliet Rotterdam,FALSE,1,100
+Houten,TRUE,1,100
+Huizen,TRUE,1,100
+IJmuiden,TRUE,1,100
+IJsselstein,TRUE,1,100
+Kampen,TRUE,1,100
+Katwijk,TRUE,1,100
+Koog aan de Zaan,TRUE,1,100
+Kornhorn,FALSE,1,100
+Kortenhoef,FALSE,1,100
+Krimpen aan den IJssel,TRUE,1,100
+Leek,FALSE,1,100
+Leende,FALSE,0.5,50
+Leende,TRUE,0.5,50
+Leeuwarden,FALSE,0.6,60
+Leeuwarden,TRUE,0.4,40
+Leiden,TRUE,0.8,80
+Leiden,FALSE,0.2,20
+Lekkerkerk,FALSE,1,100
+Lelystad,TRUE,0.75,75
+Lelystad,FALSE,0.25,25
+Lent,TRUE,1,100
+Leuth,TRUE,1,100
+Lisserbroek,TRUE,1,100
+Lunteren,TRUE,1,100
+Maarssen,TRUE,1,100
+Maasland,FALSE,1,100
+Maastricht,FALSE,0.5,50
+Maastricht,TRUE,0.5,50
+Medemblik,FALSE,1,100
+Middelburg,TRUE,1,100
+Mierlo,FALSE,1,100
+Monnickendam,TRUE,0.666666667,66.66666667
+Monnickendam,FALSE,0.333333333,33.33333333
+Naarden,TRUE,1,100
+Nieuw-Vennep,TRUE,1,100
+Nieuwdorp,TRUE,1,100
+Nieuwe Pekela,TRUE,1,100
+Nieuwegein,TRUE,0.666666667,66.66666667
+Nieuwegein,FALSE,0.333333333,33.33333333
+Nijmegen,TRUE,0.619047619,61.9047619
+Nijmegen,FALSE,0.380952381,38.0952381
+Noordwijkerhout,TRUE,1,100
+Nootdorp,TRUE,1,100
+Oegstgeest,TRUE,1,100
+Oost-Souburg,FALSE,1,100
+Oud-Beijerland,FALSE,1,100
+Ouderkerk aan de Amstel,FALSE,1,100
+Papendrecht,TRUE,1,100
+Pieterburen,FALSE,1,100
+Purmerend,TRUE,1,100
+Renkum,FALSE,1,100
+Rhenen,TRUE,1,100
+Rijen,FALSE,1,100
+Rosmalen,TRUE,1,100
+Rotterdam,TRUE,0.858333333,85.83333333
+Rotterdam,FALSE,0.141666667,14.16666667
+Sauwerd,TRUE,1,100
+Schagen,FALSE,1,100
+Scherpenzeel,FALSE,1,100
+Schiedam,TRUE,1,100
+Schipluiden,FALSE,1,100
+Sneek,TRUE,1,100
+Soest,FALSE,1,100
+Son en Breugel,TRUE,0.666666667,66.66666667
+Son en Breugel,FALSE,0.333333333,33.33333333
+St. Willebrord,FALSE,1,100
+Ten Boer,TRUE,1,100
+Terneuzen,TRUE,1,100
+Tiel,FALSE,0.5,50
+Tiel,TRUE,0.5,50
+Tilburg,TRUE,0.923076923,92.30769231
+Tilburg,FALSE,0.076923077,7.692307692
+Ubbena,TRUE,1,100
+Uithoorn,TRUE,1,100
+Utrecht,TRUE,0.943661972,94.36619718
+Utrecht,FALSE,0.056338028,5.633802817
+Veen,FALSE,1,100
+Veenendaal,TRUE,0.666666667,66.66666667
+Veenendaal,FALSE,0.333333333,33.33333333
+Velp,TRUE,1,100
+Venlo,TRUE,1,100
+Venray,TRUE,1,100
+Vlaardingen,FALSE,1,100
+Vlissingen,TRUE,1,100
+Volendam,FALSE,1,100
+Voorburg,TRUE,1,100
+Voorhout,FALSE,1,100
+Vught,TRUE,1,100
+Waddinxveen,TRUE,1,100
+Wageningen,TRUE,0.6,60
+Wageningen,FALSE,0.4,40
+Warmond,FALSE,1,100
+Wassenaar,TRUE,1,100
+Wijchen,FALSE,1,100
+Winschoten,TRUE,1,100
+Winterswijk,FALSE,1,100
+Woldendorp,TRUE,1,100
+Zaandam,TRUE,0.777777778,77.77777778
+Zaandam,FALSE,0.222222222,22.22222222
+Zandvoort,TRUE,1,100
+Zeist,TRUE,1,100
+Zoetermeer,TRUE,0.666666667,66.66666667
+Zoetermeer,FALSE,0.333333333,33.33333333
+Zwolle,TRUE,0.833333333,83.33333333
+Zwolle,FALSE,0.166666667,16.66666667
+de Lutte,FALSE,1,100
