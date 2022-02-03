@@ -2,7 +2,7 @@
 
 This project looks at Kamernet, the largest housing provider on the private rental market.
 
-It consists firstly of a Scrapy scraper ('code/kamernet/..') that collects all advertisements and secondly of code ('code/puntenstelsel.py') that aggregates, cleans and analyzes the data by calculating how many points the house has, what the legal price is and other statistics based on the points system for shared houses. .
+It consists firstly of a Scrapy scraper ('code/kamernet/..') that collects all advertisements and secondly of a program ('code/puntenstelsel.py') that aggregates, cleans and analyzes the data by calculating how many points the house has, what the legal price is and other statistics based on the points system for shared houses.
 
 Publications can be found at https://www.vpro.nl/argos/lees/onderwerpen/wooncrisis/status.html#
 
